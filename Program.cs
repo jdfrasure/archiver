@@ -13,7 +13,7 @@ class MainClass
     {
         if (!args.Any())
         {
-            Console.WriteLine("Example: Archiver c:\csvDatay");
+            Console.WriteLine("Example: Archiver c:\\csvDatay");
         }
         else
         {
