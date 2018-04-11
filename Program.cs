@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.GZip;
@@ -18,24 +18,23 @@ class MainClass
         else
         {
             var archivedir = args[0];
-            // var daysold = "60";
-
             string[] dirs = Directory.GetDirectories(archivedir); // something like e:\csvdatay\ 
             foreach (string directory1 in dirs)
             {
                 string[] dirname = directory1.Split(Path.DirectorySeparatorChar);
 
                 //This is for E:\csvDatay
-                string filename = (dirname[2] + ".tar");
-                Console.WriteLine("Creating " + filename);
-                CreateTarGZ(filename, dirname[2]);
+                string tgzfn = (@"c:\temp\" + dirname[2] + ".tgz");
+                string adir = directory1;
+                Console.WriteLine("Creating " + tgzfn);
+                CreateTarGZ(tgzfn, adir);
             }
         }
     }
 
     public static void CreateTarGZ(string tgzFilename, string sourceDirectory)
     {
-
+        Console.WriteLine("Running CreateTarGZ process");
         Stream outStream = File.Create(tgzFilename);
         Stream gzoStream = new GZipOutputStream(outStream);
         TarArchive tarArchive = TarArchive.CreateOutputTarArchive(gzoStream);
@@ -46,6 +45,7 @@ class MainClass
         tarArchive.RootPath = sourceDirectory.Replace('\\', '/');
         if (tarArchive.RootPath.EndsWith("/"))
             tarArchive.RootPath = tarArchive.RootPath.Remove(tarArchive.RootPath.Length - 1);
+
 
         AddDirectoryFilesToTar(tarArchive, sourceDirectory, true);
 
@@ -59,6 +59,8 @@ class MainClass
         // Optionally, write an entry for the directory itself.
         // Specify false for recursion here if we will add the directory's files individually.
         //
+        Console.WriteLine("AddDirectoryFilestoTar");
+
         TarEntry tarEntry = TarEntry.CreateEntryFromFile(sourceDirectory);
         tarArchive.WriteEntry(tarEntry, false);
 
